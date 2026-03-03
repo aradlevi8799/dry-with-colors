@@ -62,7 +62,7 @@ export default function ImageUpload({
 
       {/* Preview grid */}
       {images.length > 0 && (
-        <div className="mb-3 grid grid-cols-3 gap-2 sm:grid-cols-5">
+        <div className="mb-3 grid grid-cols-3 gap-2">
           {images.map((img, i) => (
             <div
               key={i}

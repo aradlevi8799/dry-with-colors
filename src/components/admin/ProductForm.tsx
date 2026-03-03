@@ -100,7 +100,7 @@ export default function ProductForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      <h2 className="font-heading text-2xl sm:text-3xl font-bold text-[#AB886D]">
+      <h2 className="font-heading text-2xl font-bold text-[#AB886D]">
         {isEdit ? "עריכת מוצר" : "הוספת מוצר חדש"}
       </h2>
 

@@ -29,11 +29,11 @@ export default function ProductList({
       {products.map((product, i) => (
         <div
           key={product.id}
-          className="flex items-center gap-3 sm:gap-4 rounded-lg bg-sand p-3 shadow-sm transition-all duration-200 hover:shadow-md animate-fade-up"
+          className="flex items-center gap-3 rounded-lg bg-sand p-3 shadow-sm transition-all duration-200 hover:shadow-md animate-fade-up"
           style={{ animationDelay: `${i * 0.05}s` }}
         >
           {/* Thumbnail */}
-          <div className="relative h-16 w-16 sm:h-18 sm:w-18 flex-shrink-0 overflow-hidden rounded-sm">
+          <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-sm">
             {product.images[0] ? (
               <Image
                 src={product.images[0].url}
@@ -51,10 +51,10 @@ export default function ProductList({
 
           {/* Info */}
           <div className="flex-1 min-w-0">
-            <h3 className="text-lg sm:text-xl font-bold text-charcoal truncate">
+            <h3 className="text-lg font-bold text-charcoal truncate">
               {product.name}
             </h3>
-            <div className="flex items-center gap-2 text-base sm:text-lg text-charcoal-light">
+            <div className="flex items-center gap-2 text-base text-charcoal-light">
               <span className="font-bold text-terracotta">
                 ₪{product.price}
               </span>
@@ -71,13 +71,13 @@ export default function ProductList({
           <div className="flex gap-2 flex-shrink-0">
             <button
               onClick={() => onEdit(product)}
-              className="rounded-lg bg-cream px-3 py-2 text-base sm:text-lg font-bold text-charcoal transition-colors hover:bg-taupe/20 active:scale-[0.97]"
+              className="rounded-lg bg-cream px-3 py-2 text-base font-bold text-charcoal transition-colors hover:bg-taupe/20 active:scale-[0.97]"
             >
               ערוך
             </button>
             <button
               onClick={() => onDelete(product)}
-              className="rounded-lg bg-red-50 px-3 py-2 text-base sm:text-lg font-bold text-red-500 transition-colors hover:bg-red-500 hover:text-white active:scale-[0.97]"
+              className="rounded-lg bg-red-50 px-3 py-2 text-base font-bold text-red-500 transition-colors hover:bg-red-500 hover:text-white active:scale-[0.97]"
             >
               מחק
             </button>

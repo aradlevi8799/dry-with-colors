@@ -27,7 +27,7 @@ export default function CatalogPage() {
   }, []);
 
   return (
-    <div className="mx-auto min-h-screen max-w-6xl px-4 pb-12">
+    <div className="mx-auto min-h-screen max-w-md px-4 pb-12">
       <Header />
 
       {loading ? (
@@ -50,17 +50,17 @@ export default function CatalogPage() {
       />
 
       {/* Footer */}
-      <footer className="mt-12 sm:mt-20 pt-6 sm:pt-8 text-center">
-        <div className="flex items-center justify-center gap-3 sm:gap-4 mb-4 sm:mb-6">
-          <div className="h-px w-12 sm:w-16 bg-gradient-to-l from-sand-dark to-transparent" />
+      <footer className="mt-12 pt-6 text-center">
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <div className="h-px w-12 bg-gradient-to-l from-sand-dark to-transparent" />
           <div className="h-1.5 w-1.5 rounded-full bg-terracotta/40" />
-          <div className="h-px w-12 sm:w-16 bg-gradient-to-r from-sand-dark to-transparent" />
+          <div className="h-px w-12 bg-gradient-to-r from-sand-dark to-transparent" />
         </div>
 
-        <p className="font-heading text-2xl sm:text-3xl font-bold tracking-[0.06em] sm:tracking-[0.08em] text-[#AB886D]">
+        <p className="font-heading text-2xl font-bold tracking-[0.06em] text-[#AB886D]">
           Dry With Colors
         </p>
-        <p className="mt-2 text-base sm:text-lg text-[#AB886D]">
+        <p className="mt-2 text-base text-[#AB886D]">
           סידורי פרחים יבשים, כלי גבס מעוצבים בעבודת יד
         </p>
 

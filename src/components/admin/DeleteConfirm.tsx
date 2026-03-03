@@ -19,15 +19,15 @@ export default function DeleteConfirm({
 }: DeleteConfirmProps) {
   return (
     <Modal isOpen={isOpen} onClose={onCancel}>
-      <div className="p-6 sm:p-8 text-center">
+      <div className="p-6 text-center">
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-50 text-2xl">
           🗑️
         </div>
-        <h3 className="text-2xl sm:text-3xl font-bold text-charcoal">מחיקת מוצר</h3>
-        <p className="mt-3 text-lg sm:text-xl text-charcoal-light">
+        <h3 className="text-2xl font-bold text-charcoal">מחיקת מוצר</h3>
+        <p className="mt-3 text-lg text-charcoal-light">
           האם למחוק את <strong>&quot;{productName}&quot;</strong>?
         </p>
-        <p className="mt-1 text-base sm:text-lg text-taupe">פעולה זו לא ניתנת לביטול</p>
+        <p className="mt-1 text-base text-taupe">פעולה זו לא ניתנת לביטול</p>
 
         <div className="mt-6 flex gap-3 justify-center">
           <button

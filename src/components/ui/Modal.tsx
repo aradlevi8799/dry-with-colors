@@ -44,7 +44,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4"
+      className="fixed inset-0 z-50 flex items-end justify-center"
       onClick={onClose}
     >
       {/* Backdrop */}
@@ -56,20 +56,20 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
 
       {/* Content */}
       <div
-        className={`relative z-10 max-h-[95vh] sm:max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-t-2xl sm:rounded-xl bg-cream shadow-2xl transition-all duration-300 ease-out ${
+        className={`relative z-10 max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-t-2xl bg-cream shadow-2xl transition-all duration-300 ease-out ${
           visible
             ? "opacity-100 scale-100 translate-y-0"
-            : "opacity-0 sm:scale-95 translate-y-8 sm:translate-y-4"
+            : "opacity-0 translate-y-8"
         }`}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Mobile drag handle */}
-        <div className="sm:hidden flex justify-center pt-3 pb-1">
+        {/* Drag handle */}
+        <div className="flex justify-center pt-3 pb-1">
           <div className="h-1 w-10 rounded-full bg-taupe/30" />
         </div>
         <button
           onClick={onClose}
-          className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-cream/90 text-charcoal-light shadow-sm transition-all duration-200 hover:bg-sand hover:text-charcoal"
+          className="absolute top-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-cream/90 text-charcoal-light shadow-sm transition-all duration-200 hover:bg-sand hover:text-charcoal"
           aria-label="סגור"
         >
           <svg

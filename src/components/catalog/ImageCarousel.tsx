@@ -56,7 +56,7 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
           alt={alt}
           fill
           className="object-cover"
-          sizes="(max-width: 768px) 100vw, 600px"
+          sizes="100vw"
         />
       </div>
     );
@@ -79,42 +79,22 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
             className={`object-cover transition-opacity duration-500 ${
               i === current ? "opacity-100" : "opacity-0"
             }`}
-            sizes="(max-width: 768px) 100vw, 600px"
+            sizes="100vw"
             priority={i === 0}
           />
         ))}
       </div>
 
-      {/* Navigation arrows — hidden on mobile (use swipe instead) */}
-      <button
-        onClick={next}
-        className="absolute top-1/2 left-2 sm:left-3 -translate-y-1/2 hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-cream/80 text-charcoal backdrop-blur-sm shadow-sm transition-all duration-200 hover:bg-cream hover:shadow"
-        aria-label="תמונה הבאה"
-      >
-        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-        </svg>
-      </button>
-      <button
-        onClick={prev}
-        className="absolute top-1/2 right-2 sm:right-3 -translate-y-1/2 hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-cream/80 text-charcoal backdrop-blur-sm shadow-sm transition-all duration-200 hover:bg-cream hover:shadow"
-        aria-label="תמונה קודמת"
-      >
-        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
-
       {/* Dots indicator */}
-      <div className="absolute bottom-3 sm:bottom-4 left-1/2 flex -translate-x-1/2 gap-1.5 sm:gap-2">
+      <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
         {images.map((_, i) => (
           <button
             key={i}
             onClick={() => goTo(i)}
             className={`rounded-full transition-all duration-300 ${
               i === current
-                ? "h-1.5 w-4 sm:h-2 sm:w-5 bg-white shadow-sm"
-                : "h-1.5 w-1.5 sm:h-2 sm:w-2 bg-white/50 hover:bg-white/70"
+                ? "h-1.5 w-4 bg-white shadow-sm"
+                : "h-1.5 w-1.5 bg-white/50 hover:bg-white/70"
             }`}
             aria-label={`תמונה ${i + 1}`}
           />
