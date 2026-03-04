@@ -50,7 +50,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
           <div className="h-px w-8 bg-gradient-to-r from-terracotta/40 to-transparent" />
         </div>
 
-        <h1 className="mb-6 text-center font-heading text-3xl font-bold text-[#8B6F57]">
+        <h1 className="mb-6 text-center font-heading text-3xl font-bold text-brand">
           כניסת מנהל
         </h1>
 
@@ -61,7 +61,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full rounded-lg border border-taupe/30 bg-white px-4 py-3 text-xl text-charcoal outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20"
+          className="w-full rounded-lg border border-taupe/30 bg-gray-50 px-4 py-3 text-xl text-charcoal outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20 focus:bg-white"
           placeholder="הזיני סיסמה..."
           autoFocus
         />

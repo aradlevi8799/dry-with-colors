@@ -74,7 +74,7 @@ export default function AdminPage() {
       <div className="bg-sand shadow-sm">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4">
           <div>
-            <h1 className="font-heading text-2xl font-bold text-[#8B6F57]">
+            <h1 className="font-heading text-2xl font-bold text-brand">
               ניהול מוצרים
             </h1>
             <p className="text-base text-taupe font-bold">Dry With Colors</p>
@@ -88,7 +88,7 @@ export default function AdminPage() {
             </a>
             <button
               onClick={handleLogout}
-              className="rounded-lg border border-taupe/30 px-3 py-2 text-base font-bold text-charcoal-light transition-colors hover:bg-white"
+              className="rounded-lg border border-taupe/30 px-3 py-2 text-base font-bold text-charcoal-light transition-colors hover:bg-taupe/10"
             >
               יציאה
             </button>

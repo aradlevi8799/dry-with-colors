@@ -15,9 +15,18 @@ export default function ProductCard({ product, onClick, index = 0 }: ProductCard
 
   return (
     <div
-      className="group cursor-pointer animate-fade-up"
+      role="button"
+      tabIndex={0}
+      className="group cursor-pointer animate-fade-up outline-none focus-visible:ring-2 focus-visible:ring-terracotta/50 focus-visible:ring-offset-2 rounded-sm"
       style={{ animationDelay: `${0.1 + index * 0.07}s` }}
       onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+      aria-label={`${product.name} - ₪${product.price}`}
     >
       {/* Image */}
       <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-sand">
@@ -27,7 +36,7 @@ export default function ProductCard({ product, onClick, index = 0 }: ProductCard
             alt={product.name}
             fill
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-            sizes="50vw"
+            sizes="(max-width: 639px) 50vw, (max-width: 1023px) 33vw, 25vw"
           />
         ) : (
           <div className="flex h-full items-center justify-center text-taupe text-sm">

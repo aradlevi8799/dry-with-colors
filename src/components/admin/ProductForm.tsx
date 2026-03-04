@@ -100,7 +100,7 @@ export default function ProductForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      <h2 className="font-heading text-2xl font-bold text-[#8B6F57]">
+      <h2 className="font-heading text-2xl font-bold text-brand">
         {isEdit ? "עריכת מוצר" : "הוספת מוצר חדש"}
       </h2>
 
@@ -115,7 +115,7 @@ export default function ProductForm({
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full rounded-lg border border-taupe/30 bg-white px-4 py-3 text-xl text-charcoal outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20"
+          className="w-full rounded-lg border border-taupe/30 bg-gray-50 px-4 py-3 text-xl text-charcoal outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20 focus:bg-white"
           placeholder="למשל: סידור פמפס גראס"
         />
       </div>
@@ -129,7 +129,7 @@ export default function ProductForm({
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={4}
-          className="w-full rounded-lg border border-taupe/30 bg-white px-4 py-3 text-xl text-charcoal outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20 resize-none"
+          className="w-full rounded-lg border border-taupe/30 bg-gray-50 px-4 py-3 text-xl text-charcoal outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20 focus:bg-white resize-none"
           placeholder="תיאור המוצר, כולל מידות..."
         />
       </div>
@@ -145,7 +145,7 @@ export default function ProductForm({
           onChange={(e) => setPrice(e.target.value)}
           min="0"
           step="1"
-          className="w-full rounded-lg border border-taupe/30 bg-white px-4 py-3 text-xl text-charcoal outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20"
+          className="w-full rounded-lg border border-taupe/30 bg-gray-50 px-4 py-3 text-xl text-charcoal outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20 focus:bg-white"
           placeholder="0"
         />
       </div>

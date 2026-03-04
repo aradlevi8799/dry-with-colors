@@ -1,8 +1,7 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-cream: #FFDBB5;
-  --color-cream-dark: #EFE9DD;
+  --color-brand: #8B6F57;
   --color-sand: #E8E0D0;
   --color-sand-dark: #DBD0BC;
   --color-terracotta: #BE6B4A;
@@ -10,11 +9,8 @@
   --color-terracotta-light: #D4907A;
   --color-taupe: #968477;
   --color-taupe-light: #AEA196;
-  --color-sage: #889E74;
-  --color-sage-light: #A3B592;
   --color-charcoal: #2A2623;
   --color-charcoal-light: #524B44;
-  --color-amber: #C4A265;
   --color-white: #FFFFFF;
   --color-red-500: #EF4444;
   --color-red-600: #DC2626;
@@ -26,6 +22,8 @@
 
 * {
   box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-taupe) transparent;
 }
 
 html, body {
@@ -72,17 +70,6 @@ body {
   to { opacity: 1; }
 }
 
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95) translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
 @keyframes growLine {
   from {
     transform: scaleX(0);
@@ -94,21 +81,12 @@ body {
   }
 }
 
-@keyframes gentlePulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
-}
-
 .animate-fade-up {
   animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .animate-fade-in {
   animation: fadeIn 0.5s ease both;
-}
-
-.animate-scale-in {
-  animation: scaleIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .animate-grow-line {
@@ -122,3 +100,14 @@ body {
 .delay-4 { animation-delay: 0.32s; }
 .delay-5 { animation-delay: 0.40s; }
 .delay-6 { animation-delay: 0.48s; }
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+

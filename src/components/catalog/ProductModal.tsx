@@ -17,7 +17,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
     <Modal isOpen={!!product} onClose={onClose}>
       <ImageCarousel images={product.images} alt={product.name} />
 
-      <div className="p-4">
+      <div className="p-4 pb-6">
         <h2 className="font-heading text-3xl font-bold text-charcoal leading-tight">
           {product.name}
         </h2>
@@ -27,12 +27,12 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
         </p>
 
         {/* Catalog notice */}
-        <p className="mt-4 text-lg font-bold text-[#8B6F57] text-center tracking-wide">
+        <p className="mt-4 text-lg font-bold text-brand text-center tracking-wide">
           האתר הינו לתצוגה בלבד, רוצה להזמין? ממתינה לך בוואטסאפ
         </p>
 
         {/* Price + WhatsApp */}
-        <div className="mt-3 flex items-center justify-between border-t border-sand pt-4">
+        <div className="mt-3 flex items-center justify-between border-t border-sand-dark/40 pt-4">
           <span className="font-heading text-3xl font-bold text-terracotta">
             ₪{product.price}
           </span>

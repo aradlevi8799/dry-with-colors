@@ -42,6 +42,8 @@ export default function ImageUpload({
   }
 
   function removeImage(index: number) {
+    const removed = images[index];
+    if (removed.file) URL.revokeObjectURL(removed.url);
     const updated = images.filter((_, i) => i !== index);
     onChange(updated);
   }
@@ -80,12 +82,14 @@ export default function ImageUpload({
                   ראשית
                 </span>
               )}
-              <div className="absolute inset-0 flex items-center justify-center gap-1 bg-charcoal/50 opacity-0 transition-opacity group-hover:opacity-100">
+              {/* Action buttons — always visible for touch support */}
+              <div className="absolute bottom-0 inset-x-0 flex items-center justify-center gap-1 bg-charcoal/60 py-1.5 px-1">
                 {i > 0 && (
                   <button
                     type="button"
                     onClick={() => moveImage(i, i - 1)}
-                    className="rounded bg-cream/90 px-2 py-1 text-sm font-bold"
+                    className="rounded bg-white/90 px-2 py-1 text-sm font-bold min-h-[28px]"
+                    aria-label={`הזז תמונה ${i + 1} ימינה`}
                   >
                     →
                   </button>
@@ -94,7 +98,8 @@ export default function ImageUpload({
                   <button
                     type="button"
                     onClick={() => moveImage(i, i + 1)}
-                    className="rounded bg-cream/90 px-2 py-1 text-sm font-bold"
+                    className="rounded bg-white/90 px-2 py-1 text-sm font-bold min-h-[28px]"
+                    aria-label={`הזז תמונה ${i + 1} שמאלה`}
                   >
                     ←
                   </button>
@@ -102,7 +107,8 @@ export default function ImageUpload({
                 <button
                   type="button"
                   onClick={() => removeImage(i)}
-                  className="rounded bg-red-500 px-2 py-1 text-sm font-bold text-white"
+                  className="rounded bg-red-500 px-2 py-1 text-sm font-bold text-white min-h-[28px]"
+                  aria-label={`מחק תמונה ${i + 1}`}
                 >
                   ✕
                 </button>
@@ -125,7 +131,7 @@ export default function ImageUpload({
           className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-colors ${
             dragOver
               ? "border-terracotta bg-terracotta/5"
-              : "border-taupe/30 bg-cream hover:border-terracotta/50"
+              : "border-taupe/30 bg-gray-50 hover:border-terracotta/50"
           }`}
         >
           <span className="text-3xl mb-2">📷</span>

@@ -12,6 +12,10 @@ const amatic = Amatic_SC({
 export const metadata: Metadata = {
   title: "Dry With Colors | קטלוג מוצרים",
   description: "קטלוג סידורי פרחים יבשים, כלי גבס מעוצבים בעבודת יד",
+  other: {
+    "theme-color": "#FFFFFF",
+    "viewport": "width=device-width, initial-scale=1, viewport-fit=cover",
+  },
 };
 
 export default function RootLayout({

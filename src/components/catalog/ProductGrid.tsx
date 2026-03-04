@@ -18,13 +18,13 @@ export default function ProductGrid({
         <p className="font-heading text-3xl text-taupe font-bold">
           אין מוצרים להצגה כרגע
         </p>
-        <p className="mt-3 text-lg text-taupe/60">בקרוב יתווספו מוצרים חדשים</p>
+        <p className="mt-3 text-lg text-taupe">בקרוב יתווספו מוצרים חדשים</p>
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-2 gap-x-3 gap-y-6">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-3 gap-y-6 sm:gap-x-4 sm:gap-y-8">
       {products.map((product, i) => (
         <ProductCard
           key={product.id}
