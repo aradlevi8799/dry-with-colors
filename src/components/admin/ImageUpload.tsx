@@ -121,6 +121,8 @@ export default function ImageUpload({
       {/* Upload area */}
       {images.length < maxImages && (
         <div
+          role="button"
+          tabIndex={0}
           onDragOver={(e) => {
             e.preventDefault();
             setDragOver(true);
@@ -128,11 +130,18 @@ export default function ImageUpload({
           onDragLeave={() => setDragOver(false)}
           onDrop={handleDrop}
           onClick={() => inputRef.current?.click()}
-          className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-colors ${
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              inputRef.current?.click();
+            }
+          }}
+          className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-terracotta/50 ${
             dragOver
               ? "border-terracotta bg-terracotta/5"
-              : "border-taupe/30 bg-gray-50 hover:border-terracotta/50"
+              : "border-taupe/30 bg-sand/30 hover:border-terracotta/50"
           }`}
+          aria-label="העלאת תמונות"
         >
           <span className="text-3xl mb-2">📷</span>
           <p className="text-lg font-bold text-charcoal-light">

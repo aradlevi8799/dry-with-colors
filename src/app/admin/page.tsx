@@ -2,15 +2,18 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Product } from "@/types/product";
-import { getAllProducts, deleteProduct } from "@/lib/products";
+import { getAllProducts, deleteProduct, toggleOutOfStock } from "@/lib/products";
+import { getCatalogVisits } from "@/lib/analytics";
 import { deleteAllProductImages } from "@/lib/storage";
 import ProductList from "@/components/admin/ProductList";
 import ProductForm from "@/components/admin/ProductForm";
 import DeleteConfirm from "@/components/admin/DeleteConfirm";
 import Modal from "@/components/ui/Modal";
+import StatsBar from "@/components/admin/StatsBar";
 
 export default function AdminPage() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [catalogVisits, setCatalogVisits] = useState(0);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -19,8 +22,12 @@ export default function AdminPage() {
 
   const loadProducts = useCallback(async () => {
     try {
-      const data = await getAllProducts();
+      const [data, visits] = await Promise.all([
+        getAllProducts(),
+        getCatalogVisits(),
+      ]);
       setProducts(data);
+      setCatalogVisits(visits);
     } catch (err) {
       console.error("Failed to load products:", err);
     } finally {
@@ -40,6 +47,15 @@ export default function AdminPage() {
   function handleAdd() {
     setEditingProduct(null);
     setShowForm(true);
+  }
+
+  async function handleToggleStock(product: Product) {
+    try {
+      await toggleOutOfStock(product.id, !product.outOfStock);
+      await loadProducts();
+    } catch (err) {
+      console.error("Toggle stock error:", err);
+    }
   }
 
   async function handleDelete() {
@@ -98,6 +114,10 @@ export default function AdminPage() {
 
       {/* Content */}
       <div className="mx-auto max-w-3xl px-4 py-6">
+        {!loading && products.length > 0 && (
+          <StatsBar products={products} catalogVisits={catalogVisits} />
+        )}
+
         {/* Add button */}
         <button
           onClick={handleAdd}
@@ -116,6 +136,7 @@ export default function AdminPage() {
             products={products}
             onEdit={handleEdit}
             onDelete={setDeletingProduct}
+            onToggleStock={handleToggleStock}
           />
         )}
       </div>
@@ -127,6 +148,7 @@ export default function AdminPage() {
           setShowForm(false);
           setEditingProduct(null);
         }}
+        ariaLabel={editingProduct ? "עריכת מוצר" : "הוספת מוצר חדש"}
       >
         <div className="p-4">
           <ProductForm

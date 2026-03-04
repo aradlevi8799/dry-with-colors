@@ -54,14 +54,15 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
           כניסת מנהל
         </h1>
 
-        <label className="block text-lg font-bold text-charcoal-light mb-2">
+        <label htmlFor="login-password" className="block text-lg font-bold text-charcoal-light mb-2">
           סיסמה
         </label>
         <input
+          id="login-password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full rounded-lg border border-taupe/30 bg-gray-50 px-4 py-3 text-xl text-charcoal outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20 focus:bg-white"
+          className="w-full rounded-lg border border-taupe/30 bg-sand/30 px-4 py-3 text-xl text-charcoal outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20 focus:bg-white"
           placeholder="הזיני סיסמה..."
           autoFocus
         />

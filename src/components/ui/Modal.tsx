@@ -6,9 +6,10 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
+  ariaLabel?: string;
 }
 
-export default function Modal({ isOpen, onClose, children }: ModalProps) {
+export default function Modal({ isOpen, onClose, children, ariaLabel }: ModalProps) {
   const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -77,6 +78,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
       onClick={onClose}
       role="dialog"
       aria-modal="true"
+      aria-label={ariaLabel}
       onKeyDown={handleKeyDown}
     >
       {/* Backdrop */}
@@ -103,7 +105,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
         </div>
         <button
           onClick={onClose}
-          className="absolute top-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-charcoal-light shadow-sm transition-all duration-200 hover:bg-gray-100 hover:text-charcoal focus-visible:ring-2 focus-visible:ring-terracotta/50"
+          className="absolute top-2 left-2 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-charcoal-light shadow-sm transition-all duration-200 hover:bg-sand hover:text-charcoal focus-visible:ring-2 focus-visible:ring-terracotta/50"
           aria-label="סגור"
         >
           <svg

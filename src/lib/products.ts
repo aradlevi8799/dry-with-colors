@@ -9,6 +9,7 @@ import {
   query,
   serverTimestamp,
   Timestamp,
+  increment,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { Product, ProductFormData, ProductImage } from "@/types/product";
@@ -25,6 +26,8 @@ function toProduct(id: string, data: Record<string, unknown>): Product {
     images: (data.images as ProductImage[]) || [],
     displayOrder: (data.displayOrder as number) || 0,
     createdAt: ts ? ts.toDate() : new Date(),
+    viewCount: (data.viewCount as number) || 0,
+    outOfStock: !!data.outOfStock,
   };
 }
 
@@ -50,7 +53,7 @@ export async function getAllProducts(): Promise<Product[]> {
 }
 
 export async function addProduct(
-  data: ProductFormData,
+  data: ProductFormData & { outOfStock?: boolean },
   images: ProductImage[]
 ): Promise<string> {
   const docRef = await addDoc(collection(db, COLLECTION), {
@@ -64,7 +67,7 @@ export async function addProduct(
 
 export async function updateProduct(
   id: string,
-  data: Partial<ProductFormData>,
+  data: Partial<ProductFormData> & { outOfStock?: boolean },
   images?: ProductImage[]
 ): Promise<void> {
   const updateData: Record<string, unknown> = { ...data };
@@ -76,4 +79,21 @@ export async function updateProduct(
 
 export async function deleteProduct(id: string): Promise<void> {
   await deleteDoc(doc(db, COLLECTION, id));
+}
+
+export async function toggleOutOfStock(
+  id: string,
+  outOfStock: boolean
+): Promise<void> {
+  await updateDoc(doc(db, COLLECTION, id), { outOfStock });
+}
+
+export async function incrementViewCount(productId: string): Promise<void> {
+  try {
+    await updateDoc(doc(db, COLLECTION, productId), {
+      viewCount: increment(1),
+    });
+  } catch (err) {
+    console.warn("Failed to increment view count:", err);
+  }
 }

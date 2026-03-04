@@ -11,6 +11,8 @@ export interface Product {
   images: ProductImage[];
   displayOrder: number;
   createdAt: Date;
+  viewCount?: number;
+  outOfStock?: boolean;
 }
 
 export interface ProductFormData {

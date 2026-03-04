@@ -35,7 +35,9 @@ export default function ProductCard({ product, onClick, index = 0 }: ProductCard
             src={coverImage}
             alt={product.name}
             fill
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+            className={`object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] ${
+              product.outOfStock ? "grayscale" : ""
+            }`}
             sizes="(max-width: 639px) 50vw, (max-width: 1023px) 33vw, 25vw"
           />
         ) : (
@@ -54,8 +56,19 @@ export default function ProductCard({ product, onClick, index = 0 }: ProductCard
           </div>
         )}
 
+        {/* Out of stock overlay */}
+        {product.outOfStock && (
+          <div className="absolute inset-0 flex items-center justify-center bg-charcoal/30">
+            <span className="rounded-full bg-white/90 px-3 py-1 text-sm font-bold text-charcoal shadow">
+              אזל המלאי, יחודש בהקדם
+            </span>
+          </div>
+        )}
+
         {/* Hover overlay */}
-        <div className="absolute inset-0 bg-charcoal/0 transition-colors duration-500 group-hover:bg-charcoal/[0.04]" />
+        {!product.outOfStock && (
+          <div className="absolute inset-0 bg-charcoal/0 transition-colors duration-500 group-hover:bg-charcoal/[0.04]" />
+        )}
       </div>
 
       {/* Info */}
@@ -70,10 +83,16 @@ export default function ProductCard({ product, onClick, index = 0 }: ProductCard
           <span className="font-heading text-2xl font-bold text-terracotta">
             ₪{product.price}
           </span>
-          <WhatsAppButton
-            productName={product.name}
-            compact
-          />
+          {product.outOfStock ? (
+            <span className="rounded-full bg-red-50 px-2.5 py-1 text-xs font-bold text-red-500 whitespace-nowrap">
+              אזל המלאי
+            </span>
+          ) : (
+            <WhatsAppButton
+              productName={product.name}
+              compact
+            />
+          )}
         </div>
       </div>
     </div>

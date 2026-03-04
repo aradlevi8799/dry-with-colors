@@ -4,6 +4,7 @@ import { Product } from "@/types/product";
 import Modal from "@/components/ui/Modal";
 import ImageCarousel from "./ImageCarousel";
 import WhatsAppButton from "./WhatsAppButton";
+import ShareButton from "./ShareButton";
 
 interface ProductModalProps {
   product: Product | null;
@@ -14,7 +15,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
   if (!product) return null;
 
   return (
-    <Modal isOpen={!!product} onClose={onClose}>
+    <Modal isOpen={!!product} onClose={onClose} ariaLabel={product.name}>
       <ImageCarousel images={product.images} alt={product.name} />
 
       <div className="p-4 pb-6">
@@ -26,17 +27,29 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
           {product.description}
         </p>
 
-        {/* Catalog notice */}
-        <p className="mt-4 text-lg font-bold text-brand text-center tracking-wide">
-          האתר הינו לתצוגה בלבד, רוצה להזמין? ממתינה לך בוואטסאפ
-        </p>
+        {product.outOfStock ? (
+          <div className="mt-4 rounded-lg bg-red-50 p-3 text-center">
+            <p className="text-lg font-bold text-red-600">
+              אזל המלאי, יחודש בהקדם
+            </p>
+          </div>
+        ) : (
+          <p className="mt-4 text-lg font-bold text-brand text-center tracking-wide">
+            האתר הינו לתצוגה בלבד, רוצה להזמין? ממתינה לך בוואטסאפ
+          </p>
+        )}
 
-        {/* Price + WhatsApp */}
+        {/* Price + Actions */}
         <div className="mt-3 flex items-center justify-between border-t border-sand-dark/40 pt-4">
           <span className="font-heading text-3xl font-bold text-terracotta">
             ₪{product.price}
           </span>
-          <WhatsAppButton productName={product.name} />
+          <div className="flex items-center gap-2">
+            <ShareButton productName={product.name} productId={product.id} />
+            {!product.outOfStock && (
+              <WhatsAppButton productName={product.name} />
+            )}
+          </div>
         </div>
       </div>
     </Modal>

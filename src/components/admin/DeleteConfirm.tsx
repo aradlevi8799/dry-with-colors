@@ -18,7 +18,7 @@ export default function DeleteConfirm({
   loading,
 }: DeleteConfirmProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onCancel}>
+    <Modal isOpen={isOpen} onClose={onCancel} ariaLabel="מחיקת מוצר">
       <div className="p-6 text-center">
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-50 text-2xl">
           🗑️
