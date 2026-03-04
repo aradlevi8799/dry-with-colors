@@ -56,7 +56,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
 
       {/* Content */}
       <div
-        className={`relative z-10 max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-t-2xl bg-cream shadow-2xl transition-all duration-300 ease-out ${
+        className={`relative z-10 max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-t-2xl bg-white shadow-2xl transition-all duration-300 ease-out ${
           visible
             ? "opacity-100 scale-100 translate-y-0"
             : "opacity-0 translate-y-8"
@@ -69,7 +69,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
         </div>
         <button
           onClick={onClose}
-          className="absolute top-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-cream/90 text-charcoal-light shadow-sm transition-all duration-200 hover:bg-sand hover:text-charcoal"
+          className="absolute top-3 left-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-charcoal-light shadow-sm transition-all duration-200 hover:bg-gray-100 hover:text-charcoal"
           aria-label="סגור"
         >
           <svg

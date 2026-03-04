@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="he" dir="rtl">
-      <body className={`${amatic.variable} antialiased`}>
+      <body className={`${amatic.variable} antialiased bg-white`}>
         {children}
       </body>
     </html>

@@ -57,10 +57,10 @@ export default function CatalogPage() {
           <div className="h-px w-12 bg-gradient-to-r from-sand-dark to-transparent" />
         </div>
 
-        <p className="font-heading text-2xl font-bold tracking-[0.06em] text-[#AB886D]">
+        <p className="font-heading text-2xl font-bold tracking-[0.06em] text-[#8B6F57]">
           Dry With Colors
         </p>
-        <p className="mt-2 text-base text-[#AB886D]">
+        <p className="mt-2 text-base text-[#8B6F57]">
           סידורי פרחים יבשים, כלי גבס מעוצבים בעבודת יד
         </p>
 
@@ -82,7 +82,7 @@ export default function CatalogPage() {
           </a>
         )}
 
-        <p className="mt-8 text-sm text-taupe/40 pb-4">
+        <p className="mt-8 text-sm text-taupe/60 pb-4">
           &copy; {new Date().getFullYear()} Dry With Colors
         </p>
       </footer>

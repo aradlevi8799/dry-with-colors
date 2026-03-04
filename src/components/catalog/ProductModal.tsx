@@ -27,7 +27,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
         </p>
 
         {/* Catalog notice */}
-        <p className="mt-4 text-lg font-bold text-[#AB886D] text-center tracking-wide">
+        <p className="mt-4 text-lg font-bold text-[#8B6F57] text-center tracking-wide">
           האתר הינו לתצוגה בלבד, רוצה להזמין? ממתינה לך בוואטסאפ
         </p>
 

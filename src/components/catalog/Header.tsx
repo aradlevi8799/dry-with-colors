@@ -17,12 +17,12 @@ export default function Header() {
       </div>
 
       {/* Brand name */}
-      <h1 className="animate-fade-up font-heading text-4xl font-bold tracking-[0.06em] text-[#AB886D]">
+      <h1 className="animate-fade-up font-heading text-4xl font-bold tracking-[0.06em] text-[#8B6F57]">
         Dry With Colors
       </h1>
 
       {/* Subtitle */}
-      <p className="animate-fade-up delay-2 mt-2 font-body text-lg text-[#AB886D] tracking-wide leading-snug">
+      <p className="animate-fade-up delay-2 mt-2 font-body text-lg text-[#8B6F57] tracking-wide leading-snug">
         סידורי פרחים יבשים, כלי גבס מעוצבים בעבודת יד
       </p>
 
@@ -32,7 +32,7 @@ export default function Header() {
       </div>
 
       {/* Catalog notice */}
-      <p className="animate-fade-up delay-3 mt-3 text-lg font-bold text-[#AB886D] tracking-wide">
+      <p className="animate-fade-up delay-3 mt-3 text-lg font-bold text-[#8B6F57] tracking-wide">
         האתר הינו לתצוגה בלבד, רוצה להזמין? ממתינה לך בוואטסאפ
       </p>
     </header>

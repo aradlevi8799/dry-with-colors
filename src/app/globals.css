@@ -28,23 +28,16 @@
   box-sizing: border-box;
 }
 
+html, body {
+  background-color: #FFFFFF !important;
+}
+
 body {
-  background-color: var(--color-cream);
   color: var(--color-charcoal);
   font-family: var(--font-body);
   margin: 0;
   direction: rtl;
-}
-
-/* Subtle linen texture — uses transparent dots so the base background shows through pure */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Crect width='6' height='6' fill='none'/%3E%3Crect x='0' y='0' width='1' height='1' fill='%23000' opacity='0.02'/%3E%3Crect x='3' y='3' width='1' height='1' fill='%23000' opacity='0.015'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  pointer-events: none;
-  z-index: -1;
+  min-height: 100dvh;
 }
 
 /* Scrollbar */
