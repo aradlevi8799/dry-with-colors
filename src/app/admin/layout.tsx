@@ -29,7 +29,7 @@ export default function AdminLayout({
 
   if (checking) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-cream">
+      <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-white">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-terracotta/30 border-t-terracotta" />
         <span className="text-lg text-taupe font-bold animate-pulse">טוען...</span>
       </div>

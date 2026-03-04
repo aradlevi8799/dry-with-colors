@@ -71,7 +71,7 @@ export default function ProductList({
           <div className="flex gap-2 flex-shrink-0">
             <button
               onClick={() => onEdit(product)}
-              className="rounded-lg bg-cream px-3 py-2 text-base font-bold text-charcoal transition-colors hover:bg-taupe/20 active:scale-[0.97]"
+              className="rounded-lg bg-white px-3 py-2 text-base font-bold text-charcoal transition-colors hover:bg-taupe/20 active:scale-[0.97]"
             >
               ערוך
             </button>

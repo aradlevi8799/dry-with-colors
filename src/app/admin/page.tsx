@@ -69,12 +69,12 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-cream">
+    <div className="min-h-screen bg-white">
       {/* Header */}
       <div className="bg-sand shadow-sm">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4">
           <div>
-            <h1 className="font-heading text-2xl font-bold text-[#AB886D]">
+            <h1 className="font-heading text-2xl font-bold text-[#8B6F57]">
               ניהול מוצרים
             </h1>
             <p className="text-base text-taupe font-bold">Dry With Colors</p>
@@ -82,13 +82,13 @@ export default function AdminPage() {
           <div className="flex items-center gap-2">
             <a
               href="/"
-              className="rounded-lg bg-cream px-3 py-2 text-base font-bold text-charcoal transition-colors hover:bg-taupe/20"
+              className="rounded-lg bg-white px-3 py-2 text-base font-bold text-charcoal transition-colors hover:bg-taupe/20"
             >
               צפה בקטלוג
             </a>
             <button
               onClick={handleLogout}
-              className="rounded-lg border border-taupe/30 px-3 py-2 text-base font-bold text-charcoal-light transition-colors hover:bg-cream"
+              className="rounded-lg border border-taupe/30 px-3 py-2 text-base font-bold text-charcoal-light transition-colors hover:bg-white"
             >
               יציאה
             </button>

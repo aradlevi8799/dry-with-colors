@@ -33,7 +33,7 @@ export default function DeleteConfirm({
           <button
             onClick={onCancel}
             disabled={loading}
-            className="rounded-lg border border-taupe/30 bg-cream px-6 py-2.5 text-lg font-bold text-charcoal transition-colors hover:bg-sand"
+            className="rounded-lg border border-taupe/30 bg-white px-6 py-2.5 text-lg font-bold text-charcoal transition-colors hover:bg-sand"
           >
             ביטול
           </button>
