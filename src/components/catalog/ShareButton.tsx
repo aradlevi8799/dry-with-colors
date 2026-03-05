@@ -11,6 +11,7 @@ interface ShareButtonProps {
 export default function ShareButton({ productName, productId }: ShareButtonProps) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showToast, setShowToast] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
 
   const productUrl = typeof window !== "undefined"
@@ -39,12 +40,27 @@ export default function ShareButton({ productName, productId }: ShareButtonProps
   async function handleCopyLink(e: React.MouseEvent) {
     e.stopPropagation();
     try {
-      await navigator.clipboard.writeText(productUrl);
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(productUrl);
+      } else {
+        // Fallback for non-HTTPS (e.g. local network testing)
+        const textarea = document.createElement("textarea");
+        textarea.value = productUrl;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
       setCopied(true);
+      setOpen(false);
+      setShowToast(true);
       setTimeout(() => {
         setCopied(false);
-        setOpen(false);
-      }, 1500);
+        setShowToast(false);
+      }, 2500);
     } catch {
       setOpen(false);
     }
@@ -100,6 +116,18 @@ export default function ShareButton({ productName, productId }: ShareButtonProps
               </>
             )}
           </button>
+        </div>
+      )}
+
+      {/* Copy confirmation toast */}
+      {showToast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-fade-up">
+          <div className="flex items-center gap-2 rounded-full bg-charcoal px-5 py-3 text-sm font-bold text-white shadow-lg">
+            <svg className="h-4 w-4 text-[#25D366]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+            הקישור הועתק!
+          </div>
         </div>
       )}
     </div>

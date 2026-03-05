@@ -12,6 +12,17 @@ const varela = Varela_Round({
 export const metadata: Metadata = {
   title: "Dry With Colors | קטלוג מוצרים",
   description: "קטלוג סידורי פרחים יבשים, כלי גבס מעוצבים בעבודת יד",
+  openGraph: {
+    title: "Dry With Colors | קטלוג מוצרים",
+    description: "סידורי פרחים יבשים, כלי גבס מעוצבים בעבודת יד",
+    images: [{ url: "/og-image.jpg" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Dry With Colors | קטלוג מוצרים",
+    description: "סידורי פרחים יבשים, כלי גבס מעוצבים בעבודת יד",
+    images: ["/og-image.jpg"],
+  },
   other: {
     "theme-color": "#FFFFFF",
     "viewport": "width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover",
