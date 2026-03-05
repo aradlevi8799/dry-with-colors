@@ -72,11 +72,11 @@ export default function ProductCard({ product, onClick, index = 0 }: ProductCard
       </div>
 
       {/* Info */}
-      <div className="pt-2.5 pb-1">
-        <h3 className="font-heading text-xl font-bold text-charcoal leading-tight line-clamp-1">
+      <div className="flex flex-col pt-2.5 pb-1">
+        <h3 className="font-heading text-2xl font-bold text-charcoal leading-tight line-clamp-1">
           {product.name}
         </h3>
-        <p className="mt-0.5 text-sm text-taupe line-clamp-2 leading-snug whitespace-pre-line">
+        <p className="mt-0.5 min-h-[2.5rem] text-base font-bold text-charcoal-light line-clamp-2 leading-snug whitespace-pre-line">
           {product.description}
         </p>
         <div className="mt-2 flex items-center justify-between">

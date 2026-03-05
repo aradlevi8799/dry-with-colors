@@ -26,6 +26,7 @@ export default function Modal({ isOpen, onClose, children, ariaLabel }: ModalPro
       setMounted(true);
       timeoutRef.current = setTimeout(() => setVisible(true), 20);
       document.body.style.overflow = "hidden";
+      contentRef.current?.scrollTo(0, 0);
     } else {
       setVisible(false);
       timeoutRef.current = setTimeout(() => {
@@ -35,12 +36,16 @@ export default function Modal({ isOpen, onClose, children, ariaLabel }: ModalPro
       document.body.style.overflow = "";
     }
 
-    return () => clearTimeout(timeoutRef.current);
+    return () => {
+      clearTimeout(timeoutRef.current);
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
   // Focus the close button when modal opens
   useEffect(() => {
     if (!visible || !contentRef.current) return;
+    contentRef.current.scrollTo(0, 0);
     const closeBtn = contentRef.current.querySelector<HTMLElement>("button[aria-label]");
     closeBtn?.focus();
   }, [visible]);
@@ -92,7 +97,7 @@ export default function Modal({ isOpen, onClose, children, ariaLabel }: ModalPro
       {/* Content */}
       <div
         ref={contentRef}
-        className={`relative z-10 max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-t-2xl bg-white shadow-2xl transition-all duration-300 ease-out ${
+        className={`relative z-10 max-h-[95vh] w-full max-w-2xl overflow-y-auto overscroll-contain touch-auto rounded-t-2xl bg-white shadow-2xl transition-all duration-300 ease-out ${
           visible
             ? "opacity-100 scale-100 translate-y-0"
             : "opacity-0 translate-y-8"

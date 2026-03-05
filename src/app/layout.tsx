@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description: "קטלוג סידורי פרחים יבשים, כלי גבס מעוצבים בעבודת יד",
   other: {
     "theme-color": "#FFFFFF",
-    "viewport": "width=device-width, initial-scale=1, viewport-fit=cover",
+    "viewport": "width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover",
   },
 };
 
