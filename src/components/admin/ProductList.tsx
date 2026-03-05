@@ -8,6 +8,8 @@ interface ProductListProps {
   onEdit: (product: Product) => void;
   onDelete: (product: Product) => void;
   onToggleStock: (product: Product) => void;
+  onToggleNew: (product: Product) => void;
+  highlightId?: string | null;
 }
 
 export default function ProductList({
@@ -15,6 +17,8 @@ export default function ProductList({
   onEdit,
   onDelete,
   onToggleStock,
+  onToggleNew,
+  highlightId,
 }: ProductListProps) {
   if (products.length === 0) {
     return (
@@ -31,9 +35,10 @@ export default function ProductList({
       {products.map((product, i) => (
         <div
           key={product.id}
+          id={`product-${product.id}`}
           className={`rounded-lg p-3 shadow-sm transition-all duration-200 hover:shadow-md animate-fade-up ${
             product.outOfStock ? "bg-sand/60 opacity-75" : "bg-sand"
-          }`}
+          } ${highlightId === product.id ? "ring-2 ring-terracotta shadow-md animate-pulse" : ""}`}
           style={{ animationDelay: `${i * 0.05}s` }}
         >
           <div className="flex items-center gap-3">
@@ -60,6 +65,11 @@ export default function ProductList({
                 <h3 className="text-lg font-bold text-charcoal truncate">
                   {product.name}
                 </h3>
+                {product.isNew && (
+                  <span className="flex-shrink-0 rounded-full bg-terracotta px-2 py-0.5 text-xs font-bold text-white">
+                    חדש!
+                  </span>
+                )}
                 {product.outOfStock && (
                   <span className="flex-shrink-0 rounded-full bg-red-50 px-2 py-0.5 text-xs font-bold text-red-600">
                     אזל
@@ -81,6 +91,16 @@ export default function ProductList({
 
             {/* Actions — desktop inline */}
             <div className="hidden sm:flex gap-2 flex-shrink-0">
+              <button
+                onClick={() => onToggleNew(product)}
+                className={`rounded-lg px-3 py-2 text-base font-bold transition-colors active:scale-[0.97] ${
+                  product.isNew
+                    ? "bg-terracotta text-white hover:bg-terracotta-dark"
+                    : "bg-white border border-taupe/30 text-charcoal-light hover:bg-sand"
+                }`}
+              >
+                {product.isNew ? "הסר חדש" : "חדש!"}
+              </button>
               <button
                 onClick={() => onToggleStock(product)}
                 className={`rounded-lg px-3 py-2 text-base font-bold transition-colors active:scale-[0.97] ${
@@ -107,7 +127,17 @@ export default function ProductList({
           </div>
 
           {/* Actions — mobile row below */}
-          <div className="flex sm:hidden gap-2 mt-2 pt-2 border-t border-sand-dark/20">
+          <div className="flex sm:hidden gap-2 mt-2 pt-2 border-t border-sand-dark/20 flex-wrap">
+            <button
+              onClick={() => onToggleNew(product)}
+              className={`flex-1 rounded-lg px-3 py-2 text-base font-bold transition-colors active:scale-[0.97] ${
+                product.isNew
+                  ? "bg-terracotta text-white hover:bg-terracotta-dark"
+                  : "bg-white border border-taupe/30 text-charcoal-light hover:bg-sand"
+              }`}
+            >
+              {product.isNew ? "הסר חדש" : "חדש!"}
+            </button>
             <button
               onClick={() => onToggleStock(product)}
               className={`flex-1 rounded-lg px-3 py-2 text-base font-bold transition-colors active:scale-[0.97] ${

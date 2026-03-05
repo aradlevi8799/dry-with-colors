@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Product } from "@/types/product";
-import { getAllProducts, deleteProduct, toggleOutOfStock } from "@/lib/products";
+import { getAllProducts, deleteProduct, toggleOutOfStock, toggleIsNew, resetAllViewCounts } from "@/lib/products";
 import { getCatalogVisits } from "@/lib/analytics";
 import { deleteAllProductImages } from "@/lib/storage";
 import ProductList from "@/components/admin/ProductList";
@@ -19,6 +19,8 @@ export default function AdminPage() {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [deletingProduct, setDeletingProduct] = useState<Product | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+  const [highlightId, setHighlightId] = useState<string | null>(null);
 
   const loadProducts = useCallback(async () => {
     try {
@@ -58,6 +60,15 @@ export default function AdminPage() {
     }
   }
 
+  async function handleToggleNew(product: Product) {
+    try {
+      await toggleIsNew(product.id, !product.isNew);
+      await loadProducts();
+    } catch (err) {
+      console.error("Toggle new error:", err);
+    }
+  }
+
   async function handleDelete() {
     if (!deletingProduct) return;
     setDeleting(true);
@@ -73,10 +84,25 @@ export default function AdminPage() {
     }
   }
 
-  function handleSave() {
+  async function handleSave(savedId?: string) {
+    const isNew = !editingProduct;
     setShowForm(false);
     setEditingProduct(null);
-    loadProducts();
+    await loadProducts();
+
+    // Show toast
+    setToast(isNew ? "המוצר נוסף בהצלחה!" : "המוצר עודכן בהצלחה!");
+    setTimeout(() => setToast(null), 3000);
+
+    // Highlight the product
+    if (savedId) {
+      setHighlightId(savedId);
+      setTimeout(() => setHighlightId(null), 3000);
+      // Scroll to the product
+      setTimeout(() => {
+        document.getElementById(`product-${savedId}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 100);
+    }
   }
 
   async function handleLogout() {
@@ -115,7 +141,15 @@ export default function AdminPage() {
       {/* Content */}
       <div className="mx-auto max-w-3xl px-4 py-6">
         {!loading && products.length > 0 && (
-          <StatsBar products={products} catalogVisits={catalogVisits} />
+          <StatsBar
+            products={products}
+            catalogVisits={catalogVisits}
+            onResetViews={async () => {
+              if (!confirm("לאפס את כל הצפיות?")) return;
+              await resetAllViewCounts();
+              await loadProducts();
+            }}
+          />
         )}
 
         {/* Add button */}
@@ -137,6 +171,8 @@ export default function AdminPage() {
             onEdit={handleEdit}
             onDelete={setDeletingProduct}
             onToggleStock={handleToggleStock}
+            onToggleNew={handleToggleNew}
+            highlightId={highlightId}
           />
         )}
       </div>
@@ -161,6 +197,18 @@ export default function AdminPage() {
           />
         </div>
       </Modal>
+
+      {/* Success Toast */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-fade-up">
+          <div className="flex items-center gap-2 rounded-full bg-charcoal px-5 py-3 text-sm font-bold text-white shadow-lg">
+            <svg className="h-4 w-4 text-[#25D366]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+            {toast}
+          </div>
+        </div>
+      )}
 
       {/* Delete Confirmation */}
       <DeleteConfirm

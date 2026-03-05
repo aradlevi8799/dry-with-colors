@@ -13,6 +13,7 @@ export interface Product {
   createdAt: Date;
   viewCount?: number;
   outOfStock?: boolean;
+  isNew?: boolean;
 }
 
 export interface ProductFormData {

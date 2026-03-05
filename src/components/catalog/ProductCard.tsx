@@ -46,6 +46,13 @@ export default function ProductCard({ product, onClick, index = 0 }: ProductCard
           </div>
         )}
 
+        {/* New badge */}
+        {product.isNew && !product.outOfStock && (
+          <div className="absolute top-2 left-2 z-10 rounded-full bg-terracotta px-2.5 py-0.5 text-xs font-bold text-white shadow-sm">
+            חדש!
+          </div>
+        )}
+
         {/* Image count badge */}
         {product.images.length > 1 && (
           <div className="absolute top-2 right-2 flex items-center gap-1 rounded-full bg-charcoal/50 backdrop-blur-sm px-2 py-0.5 text-[10px] text-white/90">
@@ -59,7 +66,7 @@ export default function ProductCard({ product, onClick, index = 0 }: ProductCard
         {/* Out of stock overlay */}
         {product.outOfStock && (
           <div className="absolute inset-0 flex items-center justify-center bg-charcoal/30">
-            <span className="rounded-full bg-white/90 px-3 py-1 text-sm font-bold text-charcoal shadow">
+            <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-charcoal shadow">
               אזל המלאי, יחודש בהקדם
             </span>
           </div>
@@ -73,10 +80,10 @@ export default function ProductCard({ product, onClick, index = 0 }: ProductCard
 
       {/* Info */}
       <div className="flex flex-col pt-2.5 pb-1">
-        <h3 className="font-heading text-2xl font-bold text-charcoal leading-tight line-clamp-1">
+        <h3 className="font-heading text-[22px] font-bold text-brand leading-tight line-clamp-1">
           {product.name}
         </h3>
-        <p className="mt-0.5 min-h-[2.5rem] text-base font-bold text-charcoal-light line-clamp-2 leading-snug whitespace-pre-line">
+        <p className="mt-0.5 min-h-[2.5rem] text-[13px] text-brand line-clamp-2 leading-snug whitespace-pre-line">
           {product.description}
         </p>
         <div className="mt-2 flex items-center justify-between">

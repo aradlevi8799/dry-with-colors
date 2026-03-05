@@ -30,7 +30,7 @@ export default function WhatsAppButton({
       } ${className}`}
     >
       <WhatsAppIcon className={compact ? "h-3 w-3" : "h-4 w-4"} />
-      {compact ? "להזמנה בוואטסאפ" : "להזמנה בוואטסאפ"}
+      {compact ? "להזמנה" : "להזמנה"}
     </a>
   );
 }

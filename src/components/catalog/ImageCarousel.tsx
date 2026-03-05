@@ -221,17 +221,17 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
           sizes="100vw"
           draggable={false}
         />
-        {isZoomed && (
-          <button
-            onClick={resetZoom}
-            className="absolute top-2 right-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-charcoal/40 text-white backdrop-blur-sm transition-colors hover:bg-charcoal/60"
-            aria-label="איפוס זום"
-          >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
-            </svg>
-          </button>
-        )}
+        <button
+          onClick={resetZoom}
+          className={`absolute top-2 right-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-charcoal/40 text-white backdrop-blur-sm transition-all duration-300 hover:bg-charcoal/60 ${
+            isZoomed ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none"
+          }`}
+          aria-label="איפוס זום"
+        >
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
+          </svg>
+        </button>
       </div>
     );
   }
@@ -265,8 +265,8 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
               src={img.url}
               alt={`${alt} - תמונה ${i + 1} מתוך ${images.length}`}
               fill
-              className={`object-cover transition-opacity duration-500 ${
-                i === current ? "opacity-100" : "opacity-0"
+              className={`object-cover transition-all duration-500 ease-out ${
+                i === current ? "opacity-100 scale-100" : "opacity-0 scale-[1.03]"
               }`}
               style={i === current ? imageStyle : undefined}
               sizes="(max-width: 640px) 100vw, 640px"
@@ -278,45 +278,46 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
       </div>
 
       {/* Reset zoom button */}
-      {isZoomed && (
-        <button
-          onClick={resetZoom}
-          className="absolute top-2 right-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-charcoal/40 text-white backdrop-blur-sm transition-colors hover:bg-charcoal/60"
-          aria-label="איפוס זום"
-        >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
-          </svg>
-        </button>
-      )}
+      <button
+        onClick={resetZoom}
+        className={`absolute top-2 right-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-charcoal/40 text-white backdrop-blur-sm transition-all duration-300 hover:bg-charcoal/60 ${
+          isZoomed ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none"
+        }`}
+        aria-label="איפוס זום"
+      >
+        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
+        </svg>
+      </button>
 
-      {/* Prev/Next buttons — hidden when zoomed */}
-      {!isZoomed && (
-        <>
-          <button
-            onClick={prev}
-            className="absolute right-2 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-charcoal/40 text-white backdrop-blur-sm transition-colors hover:bg-charcoal/60 focus-visible:ring-2 focus-visible:ring-white"
-            aria-label="תמונה קודמת"
-          >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-          <button
-            onClick={next}
-            className="absolute left-2 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-charcoal/40 text-white backdrop-blur-sm transition-colors hover:bg-charcoal/60 focus-visible:ring-2 focus-visible:ring-white"
-            aria-label="תמונה הבאה"
-          >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-        </>
-      )}
+      {/* Prev/Next buttons — fade when zoomed */}
+      <button
+        onClick={prev}
+        className={`absolute right-2 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-charcoal/40 text-white backdrop-blur-sm transition-all duration-300 hover:bg-charcoal/60 focus-visible:ring-2 focus-visible:ring-white ${
+          isZoomed ? "opacity-0 pointer-events-none" : "opacity-100"
+        }`}
+        aria-label="תמונה קודמת"
+      >
+        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+      <button
+        onClick={next}
+        className={`absolute left-2 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-charcoal/40 text-white backdrop-blur-sm transition-all duration-300 hover:bg-charcoal/60 focus-visible:ring-2 focus-visible:ring-white ${
+          isZoomed ? "opacity-0 pointer-events-none" : "opacity-100"
+        }`}
+        aria-label="תמונה הבאה"
+      >
+        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
 
       {/* Dots indicator */}
-      {!isZoomed && (
-        <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1" role="group" aria-label="בחירת תמונה">
+      <div className={`absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1 transition-opacity duration-300 ${
+        isZoomed ? "opacity-0 pointer-events-none" : "opacity-100"
+      }`} role="group" aria-label="בחירת תמונה">
           {images.map((_, i) => (
             <button
               key={i}
@@ -335,7 +336,6 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
             </button>
           ))}
         </div>
-      )}
     </div>
   );
 }

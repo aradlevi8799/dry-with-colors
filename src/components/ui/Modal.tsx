@@ -9,13 +9,23 @@ interface ModalProps {
   ariaLabel?: string;
 }
 
+const DISMISS_THRESHOLD = 100;
+
 export default function Modal({ isOpen, onClose, children, ariaLabel }: ModalProps) {
   const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const onCloseRef = useRef(onClose);
   const contentRef = useRef<HTMLDivElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
+
+  // Swipe refs (no React state — direct DOM for 60fps)
+  const touchStartY = useRef(0);
+  const currentDragY = useRef(0);
+  const isDragging = useRef(false);
+  const wasAtTop = useRef(false);
+
   onCloseRef.current = onClose;
 
   useEffect(() => {
@@ -29,6 +39,11 @@ export default function Modal({ isOpen, onClose, children, ariaLabel }: ModalPro
       contentRef.current?.scrollTo(0, 0);
     } else {
       setVisible(false);
+      // Reset drag transform on close
+      if (contentRef.current) {
+        contentRef.current.style.transform = "";
+        contentRef.current.style.opacity = "";
+      }
       timeoutRef.current = setTimeout(() => {
         setMounted(false);
         previousFocusRef.current?.focus();
@@ -48,6 +63,87 @@ export default function Modal({ isOpen, onClose, children, ariaLabel }: ModalPro
     contentRef.current.scrollTo(0, 0);
     const closeBtn = contentRef.current.querySelector<HTMLElement>("button[aria-label]");
     closeBtn?.focus();
+  }, [visible]);
+
+  // Swipe-to-dismiss via native touch events (bypasses React for performance)
+  useEffect(() => {
+    const el = contentRef.current;
+    if (!el || !visible) return;
+
+    function onTouchStart(e: TouchEvent) {
+      if (!el) return;
+      wasAtTop.current = el.scrollTop <= 0;
+      if (!wasAtTop.current) return;
+      touchStartY.current = e.touches[0].clientY;
+      currentDragY.current = 0;
+      isDragging.current = false;
+    }
+
+    function onTouchMove(e: TouchEvent) {
+      if (!wasAtTop.current || !el) return;
+      const delta = e.touches[0].clientY - touchStartY.current;
+
+      // Only start dragging downward
+      if (!isDragging.current) {
+        if (delta < 5) return; // not enough movement or moving up
+        isDragging.current = true;
+        el.style.transition = "none";
+      }
+
+      if (isDragging.current) {
+        // Resist upward dragging, allow downward with slight resistance
+        const dampened = Math.max(0, delta * 0.8);
+        currentDragY.current = dampened;
+        el.style.transform = `translateY(${dampened}px)`;
+        el.style.opacity = `${Math.max(0.3, 1 - dampened / 500)}`;
+
+        if (backdropRef.current) {
+          backdropRef.current.style.opacity = `${Math.max(0.1, 1 - dampened / 400)}`;
+        }
+
+        // Prevent scroll while dragging
+        e.preventDefault();
+      }
+    }
+
+    function onTouchEnd() {
+      if (!isDragging.current || !el) return;
+      isDragging.current = false;
+      wasAtTop.current = false;
+
+      if (currentDragY.current > DISMISS_THRESHOLD) {
+        // Dismiss: animate out
+        el.style.transition = "transform 0.25s ease-out, opacity 0.25s ease-out";
+        el.style.transform = "translateY(100%)";
+        el.style.opacity = "0";
+        if (backdropRef.current) {
+          backdropRef.current.style.transition = "opacity 0.25s ease-out";
+          backdropRef.current.style.opacity = "0";
+        }
+        setTimeout(() => onCloseRef.current(), 250);
+      } else {
+        // Snap back
+        el.style.transition = "transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease-out";
+        el.style.transform = "translateY(0)";
+        el.style.opacity = "1";
+        if (backdropRef.current) {
+          backdropRef.current.style.transition = "opacity 0.3s ease-out";
+          backdropRef.current.style.opacity = "1";
+        }
+      }
+
+      currentDragY.current = 0;
+    }
+
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
+    el.addEventListener("touchend", onTouchEnd, { passive: true });
+
+    return () => {
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", onTouchEnd);
+    };
   }, [visible]);
 
   // Focus trap
@@ -88,6 +184,7 @@ export default function Modal({ isOpen, onClose, children, ariaLabel }: ModalPro
     >
       {/* Backdrop */}
       <div
+        ref={backdropRef}
         className={`absolute inset-0 bg-charcoal/50 backdrop-blur-sm transition-opacity duration-300 ${
           visible ? "opacity-100" : "opacity-0"
         }`}
@@ -97,7 +194,7 @@ export default function Modal({ isOpen, onClose, children, ariaLabel }: ModalPro
       {/* Content */}
       <div
         ref={contentRef}
-        className={`relative z-10 max-h-[95vh] w-full max-w-2xl overflow-y-auto overscroll-contain touch-auto rounded-t-2xl bg-white shadow-2xl transition-all duration-300 ease-out ${
+        className={`relative z-10 max-h-[95vh] w-full max-w-2xl overflow-y-auto overscroll-contain rounded-t-2xl bg-white shadow-2xl transition-all duration-300 ease-out ${
           visible
             ? "opacity-100 scale-100 translate-y-0"
             : "opacity-0 translate-y-8"

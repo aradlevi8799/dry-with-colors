@@ -22,7 +22,7 @@ export default function Header() {
       </h1>
 
       {/* Subtitle */}
-      <p className="animate-fade-up delay-2 mt-2 font-body text-lg sm:text-xl text-brand tracking-wide leading-snug">
+      <p className="animate-fade-up delay-2 mt-2 font-body text-[15px] sm:text-xl text-brand tracking-wide leading-snug whitespace-nowrap">
         סידורי פרחים יבשים, כלי גבס מעוצבים בעבודת יד
       </p>
 
@@ -31,10 +31,6 @@ export default function Header() {
         <div className="h-px w-20 bg-gradient-to-r from-transparent via-terracotta/35 to-transparent animate-grow-line" />
       </div>
 
-      {/* Catalog notice */}
-      <p className="animate-fade-up delay-3 mt-3 text-lg sm:text-xl font-bold text-brand tracking-wide">
-        האתר הינו לתצוגה בלבד, רוצה להזמין? ממתינה לך בוואטסאפ
-      </p>
     </header>
   );
 }

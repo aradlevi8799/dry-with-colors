@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Amatic_SC } from "next/font/google";
+import { Varela_Round } from "next/font/google";
 import "./globals.css";
 
-const amatic = Amatic_SC({
-  variable: "--font-amatic",
+const varela = Varela_Round({
+  variable: "--font-varela",
   subsets: ["hebrew", "latin"],
-  weight: ["400", "700"],
+  weight: "400",
   display: "swap",
 });
 
@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="he" dir="rtl">
-      <body className={`${amatic.variable} antialiased bg-white`}>
+      <body className={`${varela.variable} antialiased bg-white`}>
         {children}
       </body>
     </html>

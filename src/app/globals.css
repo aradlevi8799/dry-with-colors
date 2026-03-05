@@ -16,14 +16,18 @@
   --color-red-600: #DC2626;
   --color-red-50: #FEF2F2;
 
-  --font-heading: "Amatic SC", cursive;
-  --font-body: "Amatic SC", cursive;
+  --font-heading: var(--font-varela), "Varela Round", sans-serif;
+  --font-body: var(--font-varela), "Varela Round", sans-serif;
 }
 
 * {
   box-sizing: border-box;
   scrollbar-width: thin;
   scrollbar-color: var(--color-taupe) transparent;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 html, body {
@@ -79,6 +83,21 @@ body {
     transform: scaleX(1);
     opacity: 1;
   }
+}
+
+@keyframes popoverIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-popover-in {
+  animation: popoverIn 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .animate-fade-up {

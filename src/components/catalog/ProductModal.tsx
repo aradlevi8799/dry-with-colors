@@ -34,8 +34,8 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
             </p>
           </div>
         ) : (
-          <p className="mt-4 text-lg font-bold text-brand text-center tracking-wide">
-            האתר הינו לתצוגה בלבד, רוצה להזמין? ממתינה לך בוואטסאפ
+          <p className="mt-4 text-xs font-bold text-brand text-center tracking-wide whitespace-nowrap">
+            הקטלוג לתצוגה בלבד, להזמנות אני ממתינה לך בוואטסאפ 🤍
           </p>
         )}
 

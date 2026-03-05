@@ -8,7 +8,7 @@ import ImageUpload, { ImageItem } from "./ImageUpload";
 
 interface ProductFormProps {
   product?: Product | null;
-  onSave: () => void;
+  onSave: (savedId?: string) => void;
   onCancel: () => void;
 }
 
@@ -70,6 +70,7 @@ export default function ProductForm({
         );
 
         await updateProduct(product.id, formData, finalImages);
+        onSave(product.id);
       } else {
         const newId = await addProduct(formData, []);
 
@@ -81,9 +82,8 @@ export default function ProductForm({
         );
 
         await updateProduct(newId, {}, uploadedImages);
+        onSave(newId);
       }
-
-      onSave();
     } catch (err) {
       console.error("Save error:", err);
       setError("שגיאה בשמירה. נסי שוב.");

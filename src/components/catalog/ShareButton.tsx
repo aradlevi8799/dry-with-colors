@@ -58,7 +58,7 @@ export default function ShareButton({ productName, productId }: ShareButtonProps
           setOpen(!open);
           setCopied(false);
         }}
-        className="inline-flex items-center justify-center gap-1 rounded-full bg-sand px-4 py-2 text-base font-bold text-charcoal-light transition-colors hover:bg-sand-dark hover:text-charcoal"
+        className="inline-flex items-center justify-center gap-1 rounded-full bg-sand px-4 py-2 text-base font-bold text-charcoal-light transition-all duration-200 hover:bg-sand-dark hover:text-charcoal active:scale-[0.97]"
         aria-label="שיתוף מוצר"
         aria-expanded={open}
         aria-haspopup="true"
@@ -70,7 +70,7 @@ export default function ShareButton({ productName, productId }: ShareButtonProps
       </button>
 
       {open && (
-        <div role="menu" className="absolute bottom-full left-0 mb-2 w-48 rounded-lg bg-white shadow-lg ring-1 ring-charcoal/10 overflow-hidden z-30">
+        <div role="menu" className="absolute bottom-full left-0 mb-2 w-48 rounded-lg bg-white shadow-lg ring-1 ring-charcoal/10 overflow-hidden z-30 animate-popover-in origin-bottom-left">
           <button
             role="menuitem"
             onClick={handleWhatsAppShare}

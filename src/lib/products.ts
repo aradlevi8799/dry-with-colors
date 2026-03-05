@@ -28,6 +28,7 @@ function toProduct(id: string, data: Record<string, unknown>): Product {
     createdAt: ts ? ts.toDate() : new Date(),
     viewCount: (data.viewCount as number) || 0,
     outOfStock: !!data.outOfStock,
+    isNew: !!data.isNew,
   };
 }
 
@@ -86,6 +87,20 @@ export async function toggleOutOfStock(
   outOfStock: boolean
 ): Promise<void> {
   await updateDoc(doc(db, COLLECTION, id), { outOfStock });
+}
+
+export async function toggleIsNew(
+  id: string,
+  isNew: boolean
+): Promise<void> {
+  await updateDoc(doc(db, COLLECTION, id), { isNew });
+}
+
+export async function resetAllViewCounts(): Promise<void> {
+  const snapshot = await getDocs(collection(db, COLLECTION));
+  await Promise.all(
+    snapshot.docs.map((d) => updateDoc(doc(db, COLLECTION, d.id), { viewCount: 0 }))
+  );
 }
 
 export async function incrementViewCount(productId: string): Promise<void> {
