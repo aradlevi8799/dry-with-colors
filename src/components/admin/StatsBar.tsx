@@ -7,9 +7,10 @@ interface StatsBarProps {
   products: Product[];
   catalogVisits: number;
   onResetViews?: () => void;
+  onResetVisits?: () => void;
 }
 
-export default function StatsBar({ products, catalogVisits, onResetViews }: StatsBarProps) {
+export default function StatsBar({ products, catalogVisits, onResetViews, onResetVisits }: StatsBarProps) {
   const stats = useMemo(() => {
     const total = products.length;
     const inStock = products.filter((p) => !p.outOfStock).length;
@@ -27,11 +28,25 @@ export default function StatsBar({ products, catalogVisits, onResetViews }: Stat
     <div className="mb-6 space-y-4">
       {/* Summary cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="rounded-lg bg-sand p-3">
-          <p className="text-sm text-taupe font-bold">כניסות לקטלוג</p>
-          <p className="font-heading text-3xl font-bold text-charcoal">
-            {catalogVisits.toLocaleString()}
-          </p>
+        <div className="rounded-lg bg-sand p-3 flex flex-col justify-between">
+          <p className="text-sm text-taupe font-bold whitespace-nowrap">כניסות לקטלוג</p>
+          <div className="flex items-end justify-between">
+            <p className="font-heading text-3xl font-bold text-charcoal">
+              {catalogVisits.toLocaleString()}
+            </p>
+            {onResetVisits && catalogVisits > 0 && (
+              <button
+                onClick={onResetVisits}
+                className="flex items-center gap-1 rounded-full border border-red-200 bg-white px-2 py-0.5 text-[10px] font-bold text-red-500 transition-all hover:bg-red-500 hover:text-white hover:border-red-500 active:scale-[0.95]"
+                aria-label="אפס כניסות"
+              >
+                <svg className="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                איפוס
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="rounded-lg bg-sand p-3">

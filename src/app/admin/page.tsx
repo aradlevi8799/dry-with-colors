@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Product } from "@/types/product";
 import { getAllProducts, deleteProduct, toggleOutOfStock, toggleIsNew, resetAllViewCounts } from "@/lib/products";
-import { getCatalogVisits } from "@/lib/analytics";
+import { getCatalogVisits, resetCatalogVisits } from "@/lib/analytics";
 import { deleteAllProductImages } from "@/lib/storage";
 import ProductList from "@/components/admin/ProductList";
 import ProductForm from "@/components/admin/ProductForm";
@@ -21,6 +21,31 @@ export default function AdminPage() {
   const [deleting, setDeleting] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [highlightId, setHighlightId] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState<"name" | "price-asc" | "price-desc" | "newest" | "views">("newest");
+  const [filterBy, setFilterBy] = useState<"all" | "in-stock" | "out-of-stock">("all");
+
+  const filteredProducts = useMemo(() => {
+    let result = [...products];
+
+    // Filter by search
+    if (search.trim()) {
+      result = result.filter((p) => p.name.includes(search.trim()));
+    }
+
+    // Filter by status
+    if (filterBy === "in-stock") result = result.filter((p) => !p.outOfStock);
+    else if (filterBy === "out-of-stock") result = result.filter((p) => p.outOfStock);
+
+    // Sort
+    if (sortBy === "name") result.sort((a, b) => a.name.localeCompare(b.name, "he"));
+    else if (sortBy === "price-asc") result.sort((a, b) => a.price - b.price);
+    else if (sortBy === "price-desc") result.sort((a, b) => b.price - a.price);
+    else if (sortBy === "newest") result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    else if (sortBy === "views") result.sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0));
+
+    return result;
+  }, [products, search, sortBy, filterBy]);
 
   const loadProducts = useCallback(async () => {
     try {
@@ -122,7 +147,7 @@ export default function AdminPage() {
             <p className="text-base text-taupe font-bold">Dry With Colors</p>
           </div>
           <div className="flex items-center gap-2">
-            <a
+<a
               href="/"
               className="rounded-lg bg-white px-3 py-2 text-base font-bold text-charcoal transition-colors hover:bg-taupe/20"
             >
@@ -149,6 +174,11 @@ export default function AdminPage() {
               await resetAllViewCounts();
               await loadProducts();
             }}
+            onResetVisits={async () => {
+              if (!confirm("לאפס את כניסות הקטלוג?")) return;
+              await resetCatalogVisits();
+              await loadProducts();
+            }}
           />
         )}
 
@@ -160,6 +190,73 @@ export default function AdminPage() {
           + הוסף מוצר חדש
         </button>
 
+        {/* Search + Sort + Filter */}
+        {!loading && products.length > 0 && (
+          <div className="mb-4 space-y-3">
+            {/* Search */}
+            <div className="relative">
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="חיפוש מוצר..."
+                className="w-full rounded-lg border border-taupe/30 bg-sand/30 px-4 py-3 pr-10 text-lg font-bold text-charcoal placeholder:text-taupe/60 outline-none transition-colors focus:border-terracotta/50 focus:bg-white"
+              />
+              <svg
+                className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-taupe"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              {search && (
+                <button
+                  onClick={() => setSearch("")}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-taupe hover:text-charcoal transition-colors"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+
+            {/* Sort + Filter row */}
+            <div className="flex gap-2 flex-wrap">
+              {/* Sort */}
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+                className="rounded-lg border border-taupe/30 bg-white px-3 py-2 text-sm font-bold text-charcoal-light outline-none transition-colors focus:border-terracotta/50 cursor-pointer"
+              >
+                <option value="newest">חדש ביותר</option>
+                <option value="name">לפי שם</option>
+                <option value="price-asc">מחיר: נמוך לגבוה</option>
+                <option value="price-desc">מחיר: גבוה לנמוך</option>
+                <option value="views">הכי נצפה</option>
+              </select>
+
+              {/* Filter chips */}
+              {(["all", "in-stock", "out-of-stock"] as const).map((f) => {
+                const labels = { all: "הכל", "in-stock": "במלאי", "out-of-stock": "אזל" };
+                return (
+                  <button
+                    key={f}
+                    onClick={() => setFilterBy(f)}
+                    className={`rounded-full px-3 py-1.5 text-sm font-bold transition-colors ${
+                      filterBy === f
+                        ? "bg-terracotta text-white"
+                        : "bg-sand text-charcoal-light hover:bg-sand-dark"
+                    }`}
+                  >
+                    {labels[f]}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {loading ? (
           <div className="flex flex-col items-center justify-center gap-3 py-12">
             <div className="h-8 w-8 animate-spin rounded-full border-2 border-terracotta/30 border-t-terracotta" />
@@ -167,7 +264,7 @@ export default function AdminPage() {
           </div>
         ) : (
           <ProductList
-            products={products}
+            products={filteredProducts}
             onEdit={handleEdit}
             onDelete={setDeletingProduct}
             onToggleStock={handleToggleStock}
