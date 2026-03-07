@@ -12,15 +12,6 @@ export async function incrementCatalogVisit(): Promise<void> {
   }
 }
 
-export async function resetCatalogVisits(): Promise<void> {
-  try {
-    const ref = doc(db, ANALYTICS_DOC);
-    await setDoc(ref, { visits: 0 }, { merge: true });
-  } catch (err) {
-    console.warn("Failed to reset catalog visits:", err);
-  }
-}
-
 export async function getCatalogVisits(): Promise<number> {
   try {
     const ref = doc(db, ANALYTICS_DOC);

@@ -2,9 +2,17 @@
 
 import { useState } from "react";
 import { Product, ProductImage } from "@/types/product";
-import { addProduct, updateProduct } from "@/lib/products";
-import { uploadProductImage, deleteProductImage } from "@/lib/storage";
 import ImageUpload, { ImageItem } from "./ImageUpload";
+
+async function apiUploadImage(productId: string, file: File, index: number): Promise<ProductImage> {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("productId", productId);
+  formData.append("index", String(index));
+  const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
+  if (!res.ok) throw new Error("Upload failed");
+  return res.json();
+}
 
 interface ProductFormProps {
   product?: Product | null;
@@ -45,7 +53,7 @@ export default function ProductForm({
     setSaving(true);
 
     try {
-      const formData = {
+      const productData = {
         name: name.trim(),
         description: description.trim(),
         price: parseFloat(price) || 0,
@@ -53,35 +61,60 @@ export default function ProductForm({
       };
 
       if (isEdit && product) {
-        // Delete removed images in parallel
+        // Delete removed images via API
         const removedImages = product.images.filter(
           (orig) => !images.some((img) => img.path === orig.path)
         );
-        await Promise.all(removedImages.map((img) => deleteProductImage(img.path)));
+        if (removedImages.length > 0) {
+          await fetch("/api/admin/images", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ paths: removedImages.map((img) => img.path) }),
+          });
+        }
 
-        // Upload new images in parallel, preserve order
+        // Upload new images via API, preserve order
         const finalImages = await Promise.all(
           images.map(async (img, i) => {
             if (img.file) {
-              return uploadProductImage(product.id, img.file, i);
+              return apiUploadImage(product.id, img.file, i);
             }
             return { url: img.url, path: img.path! } as ProductImage;
           })
         );
 
-        await updateProduct(product.id, formData, finalImages);
+        const res = await fetch(`/api/admin/products/${product.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...productData, images: finalImages }),
+        });
+        if (!res.ok) throw new Error("Update failed");
         onSave(product.id);
       } else {
-        const newId = await addProduct(formData, []);
+        // Create product via API
+        const createRes = await fetch("/api/admin/products", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(productData),
+        });
+        if (!createRes.ok) throw new Error("Create failed");
+        const { id: newId } = await createRes.json();
 
-        // Upload images in parallel
+        // Upload images via API
         const uploadedImages = await Promise.all(
           images
             .filter((img) => img.file)
-            .map((img, i) => uploadProductImage(newId, img.file!, i))
+            .map((img, i) => apiUploadImage(newId, img.file!, i))
         );
 
-        await updateProduct(newId, {}, uploadedImages);
+        // Update product with image URLs
+        if (uploadedImages.length > 0) {
+          await fetch(`/api/admin/products/${newId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ images: uploadedImages }),
+          });
+        }
         onSave(newId);
       }
     } catch (err) {

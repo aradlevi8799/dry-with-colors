@@ -2,9 +2,8 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { Product } from "@/types/product";
-import { getAllProducts, deleteProduct, toggleOutOfStock, toggleIsNew, resetAllViewCounts } from "@/lib/products";
-import { getCatalogVisits, resetCatalogVisits } from "@/lib/analytics";
-import { deleteAllProductImages } from "@/lib/storage";
+import { getAllProducts } from "@/lib/products";
+import { getCatalogVisits } from "@/lib/analytics";
 import ProductList from "@/components/admin/ProductList";
 import ProductForm from "@/components/admin/ProductForm";
 import DeleteConfirm from "@/components/admin/DeleteConfirm";
@@ -78,7 +77,11 @@ export default function AdminPage() {
 
   async function handleToggleStock(product: Product) {
     try {
-      await toggleOutOfStock(product.id, !product.outOfStock);
+      await fetch(`/api/admin/products/${product.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ outOfStock: !product.outOfStock }),
+      });
       await loadProducts();
     } catch (err) {
       console.error("Toggle stock error:", err);
@@ -87,7 +90,11 @@ export default function AdminPage() {
 
   async function handleToggleNew(product: Product) {
     try {
-      await toggleIsNew(product.id, !product.isNew);
+      await fetch(`/api/admin/products/${product.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isNew: !product.isNew }),
+      });
       await loadProducts();
     } catch (err) {
       console.error("Toggle new error:", err);
@@ -98,8 +105,9 @@ export default function AdminPage() {
     if (!deletingProduct) return;
     setDeleting(true);
     try {
-      await deleteAllProductImages(deletingProduct.images);
-      await deleteProduct(deletingProduct.id);
+      await fetch(`/api/admin/products/${deletingProduct.id}`, {
+        method: "DELETE",
+      });
       setDeletingProduct(null);
       await loadProducts();
     } catch (err) {
@@ -171,12 +179,12 @@ export default function AdminPage() {
             catalogVisits={catalogVisits}
             onResetViews={async () => {
               if (!confirm("לאפס את כל הצפיות?")) return;
-              await resetAllViewCounts();
+              await fetch("/api/admin/reset-views", { method: "POST" });
               await loadProducts();
             }}
             onResetVisits={async () => {
               if (!confirm("לאפס את כניסות הקטלוג?")) return;
-              await resetCatalogVisits();
+              await fetch("/api/admin/reset-visits", { method: "POST" });
               await loadProducts();
             }}
           />
