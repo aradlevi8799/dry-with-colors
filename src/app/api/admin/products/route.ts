@@ -38,6 +38,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ id: docRef.id });
   } catch (err) {
     console.error("Add product error:", err);
-    return NextResponse.json({ error: "שגיאה בהוספת מוצר" }, { status: 500 });
+    return NextResponse.json({ error: "שגיאה בהוספת מוצר", debug: String(err) }, { status: 500 });
   }
 }

@@ -94,7 +94,7 @@ export async function DELETE(
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("Delete product error:", err);
-    return NextResponse.json({ error: "שגיאה במחיקת מוצר" }, { status: 500 });
+    return NextResponse.json({ error: "שגיאה במחיקת מוצר", debug: String(err) }, { status: 500 });
   }
 }
 
