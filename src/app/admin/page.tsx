@@ -110,6 +110,8 @@ export default function AdminPage() {
       });
       setDeletingProduct(null);
       await loadProducts();
+      setToast("המוצר נמחק בהצלחה!");
+      setTimeout(() => setToast(null), 3000);
     } catch (err) {
       console.error("Delete error:", err);
     } finally {
