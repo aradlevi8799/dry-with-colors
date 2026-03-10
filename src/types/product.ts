@@ -15,9 +15,3 @@ export interface Product {
   outOfStock?: boolean;
   isNew?: boolean;
 }
-
-export interface ProductFormData {
-  name: string;
-  description: string;
-  price: number;
-}
