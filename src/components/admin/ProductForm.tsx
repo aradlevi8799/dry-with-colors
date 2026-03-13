@@ -4,13 +4,87 @@ import { useState } from "react";
 import { Product, ProductImage } from "@/types/product";
 import ImageUpload, { ImageItem } from "./ImageUpload";
 
+const MAX_UPLOAD_SIZE = 4 * 1024 * 1024; // 4MB - Vercel serverless limit
+
+function compressImage(file: File, maxSize: number): Promise<File> {
+  return new Promise((resolve, reject) => {
+    if (file.size <= maxSize) {
+      resolve(file);
+      return;
+    }
+
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+
+      // Scale down dimensions if very large
+      let { width, height } = img;
+      const maxDim = 2048;
+      if (width > maxDim || height > maxDim) {
+        const ratio = Math.min(maxDim / width, maxDim / height);
+        width = Math.round(width * ratio);
+        height = Math.round(height * ratio);
+      }
+
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d")!;
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // Try decreasing quality until under maxSize
+      let quality = 0.8;
+      const attempt = () => {
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) {
+              reject(new Error("לא הצלחנו לעבד את התמונה. נסי לשמור אותה מחדש ולהעלות שוב."));
+              return;
+            }
+            if (blob.size <= maxSize || quality <= 0.3) {
+              resolve(new File([blob], file.name, { type: "image/jpeg" }));
+            } else {
+              quality -= 0.1;
+              attempt();
+            }
+          },
+          "image/jpeg",
+          quality
+        );
+      };
+      attempt();
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("לא הצלחנו לפתוח את התמונה. ייתכן שהקובץ פגום - נסי להוריד אותו מחדש."));
+    };
+    img.src = url;
+  });
+}
+
 async function apiUploadImage(productId: string, file: File, index: number): Promise<ProductImage> {
+  const compressed = await compressImage(file, MAX_UPLOAD_SIZE);
   const formData = new FormData();
-  formData.append("file", file);
+  formData.append("file", compressed);
   formData.append("productId", productId);
   formData.append("index", String(index));
-  const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
-  if (!res.ok) throw new Error("Upload failed");
+
+  let res: Response;
+  try {
+    res = await fetch("/api/admin/upload", { method: "POST", body: formData });
+  } catch {
+    throw new Error("אין חיבור לאינטרנט. בדקי שהאינטרנט עובד ונסי שוב.");
+  }
+
+  if (!res.ok) {
+    if (res.status === 413) {
+      throw new Error("התמונה גדולה מדי גם אחרי כיווץ. נסי תמונה קטנה יותר (עד 4MB).");
+    }
+    const data = await res.json().catch(() => null);
+    throw new Error(data?.error || "שגיאה בהעלאת התמונה לשרת. נסי שוב.");
+  }
+
   return res.json();
 }
 
@@ -119,7 +193,11 @@ export default function ProductForm({
       }
     } catch (err) {
       console.error("Save error:", err);
-      setError("שגיאה בשמירה. נסי שוב.");
+      if (err instanceof Error && err.message) {
+        setError(err.message);
+      } else {
+        setError("שגיאה לא צפויה. נסי שוב, ואם זה ממשיך - פני לערד.");
+      }
     } finally {
       setSaving(false);
     }

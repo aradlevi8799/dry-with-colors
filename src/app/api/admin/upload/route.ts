@@ -12,19 +12,19 @@ export async function POST(request: NextRequest) {
     const index = formData.get("index") as string | null;
 
     if (!file || !productId || index === null) {
-      return NextResponse.json({ error: "חסרים שדות נדרשים" }, { status: 400 });
+      return NextResponse.json({ error: "משהו השתבש בשליחת התמונה. נסי לרענן את הדף ולהעלות שוב." }, { status: 400 });
     }
 
     if (!ALLOWED_TYPES.includes(file.type)) {
       return NextResponse.json(
-        { error: "סוג קובץ לא נתמך. נתמכים: JPEG, PNG, WebP, GIF" },
+        { error: `סוג הקובץ "${file.type || "לא ידוע"}" לא נתמך. יש להעלות תמונה מסוג JPEG, PNG, WebP או GIF.` },
         { status: 400 }
       );
     }
 
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { error: "הקובץ גדול מדי (מקסימום 10MB)" },
+        { error: "התמונה גדולה מדי (מעל 10MB). נסי לשמור אותה בגודל קטן יותר לפני ההעלאה." },
         { status: 400 }
       );
     }
@@ -45,6 +45,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ url, path });
   } catch (err) {
     console.error("Upload error:", err);
-    return NextResponse.json({ error: "שגיאה בהעלאת תמונה" }, { status: 500 });
+    return NextResponse.json({ error: "שגיאה בשמירת התמונה בשרת. נסי שוב עוד כמה דקות." }, { status: 500 });
   }
 }
